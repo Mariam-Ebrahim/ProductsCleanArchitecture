@@ -1,5 +1,4 @@
 using Serilog;
-using Serilog.Formatting.Json;
 using Microsoft.EntityFrameworkCore;
 using ProductsCleanArchitecture.Application.Interfaces;
 using ProductsCleanArchitecture.Infrastructure.Persistence;
@@ -14,7 +13,6 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
         "logs/log-.txt",
         rollingInterval: RollingInterval.Day)
-    .WriteTo.File(new JsonFormatter(), "logs/log-json-.txt", rollingInterval: RollingInterval.Day) 
     .CreateLogger();
 
 try
@@ -36,6 +34,7 @@ try
         cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly));
 
     var app = builder.Build();
+    app.UseSerilogRequestLogging();
 
     if (app.Environment.IsDevelopment())
     {

@@ -35,4 +35,6 @@ public class CreateProductHandler : IRequestHandler<CreateProductCommand, int>
 
         return product.Id;
     }
+
+
 }
