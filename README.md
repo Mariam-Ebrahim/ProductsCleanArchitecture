@@ -58,3 +58,4 @@ Logging uses `ILogger<T>` in the application handlers, with Serilog as the provi
 1. Update the connection string in `Products.API/appsettings.json` if needed.
 2. Apply the migration: `Update-Database` (Package Manager Console, default project `Products.Infrastructure`, startup project `Products.API`).
 3. Run `Products.API` and open Swagger.
+4. Logs appear in the console and in the `logs/` folder next to the running app (the folder is git-ignored).
