@@ -1,4 +1,4 @@
-# Products API: Clean Architecture + CQRS (Huma Volve Task 3)
+# Products API: Clean Architecture + CQRS (Huma Volve Task 3 & 4)
 
 A Products REST API built with ASP.NET Core, following Clean Architecture and the CQRS pattern with MediatR.
 
@@ -12,7 +12,8 @@ A Products REST API built with ASP.NET Core, following Clean Architecture and th
 - Entity Framework Core + SQL Server
 - MediatR (CQRS)
 - Data Annotations validation
-
+- Serilog (structured logging to console and rolling files)
+  
 ## Architecture
 
 | Project | Responsibility |
@@ -23,6 +24,7 @@ A Products REST API built with ASP.NET Core, following Clean Architecture and th
 | `Products.API` | Controllers, request DTOs, `Program.cs` (composition root) |
 
 Dependencies point inward: API → Application → Domain, and Infrastructure → Application.
+Logging: handlers in `Products.Application` depend only on `ILogger<T>`; Serilog is configured only in `Products.API`.
 
 ## Endpoints
 
@@ -38,6 +40,18 @@ Dependencies point inward: API → Application → Domain, and Infrastructure �
 
 - `Name`: required, 2 to 100 characters
 - `Price`: between 0.01 and 1,000,000
+
+## Logging
+
+Logging uses `ILogger<T>` in the application handlers, with Serilog as the provider in `Products.API`.
+
+- **Sinks:** console and daily rolling files (`logs/log-YYYYMMDD.txt`, last 7 files kept)
+- **Structured logging:** message templates with named properties, for example `Product created successfully. ProductId: {ProductId}`
+- **Log levels:** `Information` for normal events, `Warning` for a missing product, `Debug` for request details
+- **HTTP request logging:** `UseSerilogRequestLogging()` records the method, path, status code and duration of every request
+- **Configuration:** everything lives in the `Serilog` section of `appsettings.json`; framework noise is reduced with `Microsoft` and `System` overrides set to `Warning`
+
+![Console logging](ConsoleLogging.png)
 
 ## How to Run
 
