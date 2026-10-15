@@ -5,20 +5,15 @@ using ProductsCleanArchitecture.Infrastructure.Persistence;
 using ProductsCleanArchitecture.Infrastructure.Repositories;
 using ProductsCleanArchitecture.Application.Products.Commands.CreateProduct;
 
-Log.Logger = new LoggerConfiguration()        
-    .MinimumLevel.Information()
-    .Enrich.FromLogContext()
-    .Enrich.WithProperty("Application", "ProductsApi")
-    .WriteTo.Console()
-    .WriteTo.File(
-        "logs/log-.txt",
-        rollingInterval: RollingInterval.Day)
+var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)  
     .CreateLogger();
 
 try
 {
-    var builder = WebApplication.CreateBuilder(args);
-
+   
     builder.Host.UseSerilog();
 
     // Swagger
